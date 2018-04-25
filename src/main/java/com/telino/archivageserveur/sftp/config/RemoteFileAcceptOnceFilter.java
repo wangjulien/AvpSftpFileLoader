@@ -22,7 +22,7 @@ public class RemoteFileAcceptOnceFilter extends AbstractFileListFilter<ChannelSf
 
 	public RemoteFileAcceptOnceFilter(final String filterFileFolder, final String filterFileName) {
 		super();
-		this.fileNamePath = filterFileFolder + filterFileName;
+		this.fileNamePath = filterFileFolder + filterFileName.substring(filterFileName.lastIndexOf("/"));
 		this.filterFileFolder = new File(filterFileFolder);
 	}
 

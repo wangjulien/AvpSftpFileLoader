@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.InboundChannelAdapter;
 import org.springframework.integration.annotation.Poller;
@@ -24,7 +25,7 @@ import org.springframework.messaging.MessageHandler;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
 
 @Configuration
-//@PropertySource("classpath:sftp.properties")
+@PropertySource("classpath:sftp.properties")
 public class SftpConfig {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SftpConfig.class);
