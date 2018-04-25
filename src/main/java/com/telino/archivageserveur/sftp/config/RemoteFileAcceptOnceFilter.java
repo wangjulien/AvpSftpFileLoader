@@ -14,9 +14,9 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
 
 public class RemoteFileAcceptOnceFilter extends AbstractFileListFilter<ChannelSftp.LsEntry> {
-	
+
 	private final String fileNamePath;
-	
+
 	private final File filterFileFolder;
 	private File filterFile;
 
@@ -58,17 +58,18 @@ public class RemoteFileAcceptOnceFilter extends AbstractFileListFilter<ChannelSf
 	}
 
 	private boolean isFileDownloaded(String name) throws IOException {
-		filterFile = new File(fileNamePath + "_" + LocalDate.now().toString() );
+		filterFile = new File(fileNamePath + "_" + LocalDate.now().toString());
 		if (!filterFile.exists())
 			filterFile.createNewFile();
-		
+
 		// Check
 		for (File f : filterFileFolder.listFiles()) {
 			try (Stream<String> stream = Files.lines(f.toPath())) {
-				return stream.anyMatch(line -> line.contains(name));
+				if (stream.anyMatch(line -> line.contains(name)))
+					return true;
 			}
 		}
-		
+
 		return false;
 	}
 }

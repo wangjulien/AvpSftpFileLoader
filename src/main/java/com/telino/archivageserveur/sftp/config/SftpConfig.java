@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.InboundChannelAdapter;
 import org.springframework.integration.annotation.Poller;
@@ -25,7 +24,7 @@ import org.springframework.messaging.MessageHandler;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
 
 @Configuration
-@PropertySource("classpath:sftp.properties")
+//@PropertySource("classpath:sftp.properties")
 public class SftpConfig {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SftpConfig.class);
@@ -101,7 +100,7 @@ public class SftpConfig {
 	}
 
 	@Bean
-	@InboundChannelAdapter(channel = "fournPapierSftpChannel", poller = @Poller(cron = "0/5 * * * * *"))
+	@InboundChannelAdapter(channel = "fournPapierSftpChannel", poller = @Poller(cron = "0/10 * * * * *"))
 	public MessageSource<File> fournPapierSftpMessageSource() {
 		SftpInboundFileSynchronizingMessageSource source = new SftpInboundFileSynchronizingMessageSource(
 				fournPapierSftpInboundFileSynchronizer());
@@ -135,7 +134,7 @@ public class SftpConfig {
 	}
 
 	@Bean
-	@InboundChannelAdapter(channel = "fournMailSftpChannel", poller = @Poller(cron = "0/32 * * * * *"))
+	@InboundChannelAdapter(channel = "fournMailSftpChannel", poller = @Poller(cron = "0/10 * * * * *"))
 	public MessageSource<File> fournEmailSftpMessageSource() {
 		SftpInboundFileSynchronizingMessageSource source = new SftpInboundFileSynchronizingMessageSource(
 				fournMailSftpInboundFileSynchronizer());
@@ -169,7 +168,7 @@ public class SftpConfig {
 	}
 
 	@Bean
-	@InboundChannelAdapter(channel = "evacSftpChannel", poller = @Poller(cron = "0/33 * * * * *"))
+	@InboundChannelAdapter(channel = "evacSftpChannel", poller = @Poller(cron = "0/10 * * * * *"))
 	public MessageSource<File> evacSftpMessageSource() {
 		SftpInboundFileSynchronizingMessageSource source = new SftpInboundFileSynchronizingMessageSource(
 				evacSftpInboundFileSynchronizer());
@@ -203,7 +202,7 @@ public class SftpConfig {
 	}
 
 	@Bean
-	@InboundChannelAdapter(channel = "autofacSftpChannel", poller = @Poller(cron = "0/34 * * * * *"))
+	@InboundChannelAdapter(channel = "autofacSftpChannel", poller = @Poller(cron = "0/10 * * * * *"))
 	public MessageSource<File> autofacSftpMessageSource() {
 		SftpInboundFileSynchronizingMessageSource source = new SftpInboundFileSynchronizingMessageSource(
 				autofacSftpInboundFileSynchronizer());
