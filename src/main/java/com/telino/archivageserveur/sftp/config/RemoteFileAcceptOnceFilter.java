@@ -1,8 +1,10 @@
 package com.telino.archivageserveur.sftp.config;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,14 +18,12 @@ import com.jcraft.jsch.ChannelSftp.LsEntry;
 public class RemoteFileAcceptOnceFilter extends AbstractFileListFilter<ChannelSftp.LsEntry> {
 
 	private final String fileNamePath;
-
-	private final File filterFileFolder;
-	private File filterFile;
+	private final Path filterFileFolder;
 
 	public RemoteFileAcceptOnceFilter(final String filterFileFolder, final String filterFileName) {
 		super();
 		this.fileNamePath = filterFileFolder + filterFileName.substring(filterFileName.lastIndexOf("/"));
-		this.filterFileFolder = new File(filterFileFolder);
+		this.filterFileFolder = Paths.get(filterFileFolder);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class RemoteFileAcceptOnceFilter extends AbstractFileListFilter<ChannelSf
 				return true;
 			}
 		} catch (IOException e) {
-			System.err.println(e);
+			System.err.println(e.getMessage());
 			return false;
 		}
 	}
@@ -53,20 +53,20 @@ public class RemoteFileAcceptOnceFilter extends AbstractFileListFilter<ChannelSf
 		lineToApp.append(name);
 		lineToApp.append(System.lineSeparator());
 
-		Files.write(filterFile.toPath(), lineToApp.toString().getBytes(), StandardOpenOption.CREATE,
-				StandardOpenOption.APPEND);
+		Path filterFile = Paths.get(fileNamePath + "_" + LocalDate.now().toString());
+		if (!Files.exists(filterFile))
+			Files.createFile(filterFile);
+
+		Files.write(filterFile, lineToApp.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 	}
 
 	private boolean isFileDownloaded(String name) throws IOException {
-		filterFile = new File(fileNamePath + "_" + LocalDate.now().toString());
-		if (!filterFile.exists())
-			filterFile.createNewFile();
-
-		// Check
-		for (File f : filterFileFolder.listFiles()) {
-			try (Stream<String> stream = Files.lines(f.toPath())) {
-				if (stream.anyMatch(line -> line.contains(name)))
-					return true;
+		try (DirectoryStream<Path> folderFilesStream = Files.newDirectoryStream(filterFileFolder)) {
+			for (Path file : folderFilesStream) {
+				try (Stream<String> stream = Files.lines(file)) {
+					if (stream.anyMatch(line -> line.contains(name)))
+						return true;
+				}
 			}
 		}
 
