@@ -64,7 +64,7 @@ public class RemoteFileAcceptOnceFilter extends AbstractFileListFilter<ChannelSf
 		try (DirectoryStream<Path> folderFilesStream = Files.newDirectoryStream(filterFileFolder)) {
 			for (Path file : folderFilesStream) {
 				try (Stream<String> stream = Files.lines(file)) {
-					if (stream.anyMatch(line -> line.contains(name)))
+					if (stream.anyMatch(line -> line.contains(name) && !line.contains("filepart")))
 						return true;
 				}
 			}

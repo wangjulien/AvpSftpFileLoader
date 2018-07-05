@@ -36,6 +36,9 @@ public class AvpSftpFileLoaderApplication implements CommandLineRunner {
 
 	@Value("${sftp.local.directory.autofac}")
 	private String sftpLocalDirectoryAutofac;
+	
+	@Value("${sftp.local.directory.client_SD}")
+	private String sftpLocalDirectoryClientSD;
 
 	@Value("${sftp.filter.purg-weeks:1}")
 	private long purgeWeeks;
@@ -55,7 +58,8 @@ public class AvpSftpFileLoaderApplication implements CommandLineRunner {
 				new File(sftpLocalDirectoryFournPapier + SftpConfig.FILTER_FILE_FOLDER),
 				new File(sftpLocalDirectoryFournMail + SftpConfig.FILTER_FILE_FOLDER),
 				new File(sftpLocalDirectoryEvac + SftpConfig.FILTER_FILE_FOLDER),
-				new File(sftpLocalDirectoryAutofac + SftpConfig.FILTER_FILE_FOLDER));
+				new File(sftpLocalDirectoryAutofac + SftpConfig.FILTER_FILE_FOLDER),
+				new File(sftpLocalDirectoryClientSD + SftpConfig.FILTER_FILE_FOLDER));
 		filterFolders.forEach(File::mkdir);
 	}
 

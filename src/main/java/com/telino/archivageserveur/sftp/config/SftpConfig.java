@@ -69,6 +69,11 @@ public class SftpConfig {
 	private String sftpRemoteDirectoryAutofac;
 	@Value("${sftp.local.directory.autofac}")
 	private String sftpLocalDirectoryAutofac;
+	
+	@Value("${sftp.remote.directory.client_SD}")
+	private String sftpRemoteDirectoryClientSD;
+	@Value("${sftp.local.directory.client_SD}")
+	private String sftpLocalDirectoryClientSD;
 
 	@Value("${sftp.remote.directory.download.filter:*.*}")
 	private String sftpRemoteDirectoryDownloadFilter;
@@ -223,4 +228,40 @@ public class SftpConfig {
 			}
 		};
 	}
+	
+	// factures_client_SD
+
+	@Bean
+	public SftpInboundFileSynchronizer clientSDSftpInboundFileSynchronizer() {
+		SftpInboundFileSynchronizer fileSynchronizer = new SftpInboundFileSynchronizer(sftpSessionFactory());
+		fileSynchronizer.setDeleteRemoteFiles(true);
+		fileSynchronizer.setRemoteDirectory(sftpRemoteDirectoryClientSD);
+		fileSynchronizer.setFilter(new RemoteFileAcceptOnceFilter(
+				sftpLocalDirectoryClientSD + FILTER_FILE_FOLDER, sftpRemoteDirectoryClientSD));
+		return fileSynchronizer;
+	}
+
+	@Bean
+	@InboundChannelAdapter(channel = "clientSDSftpChannel", poller = @Poller(cron = "0/10 * * * * *"))
+	public MessageSource<File> clientSDSftpMessageSource() {
+		SftpInboundFileSynchronizingMessageSource source = new SftpInboundFileSynchronizingMessageSource(
+				clientSDSftpInboundFileSynchronizer());
+		source.setLocalDirectory(new File(sftpLocalDirectoryClientSD));
+		source.setAutoCreateLocalDirectory(true);
+		source.setLocalFilter(new AcceptOnceFileListFilter<File>());
+		return source;
+	}
+
+	@Bean
+	@ServiceActivator(inputChannel = "clientSDSftpChannel")
+	public MessageHandler clientSDResultFileHandler() {
+		return new MessageHandler() {
+			@Override
+			public void handleMessage(Message<?> message) {
+				LOGGER.info("File downloaded : {} ", message.getPayload().toString());
+			}
+		};
+	}
+	
 }
+	

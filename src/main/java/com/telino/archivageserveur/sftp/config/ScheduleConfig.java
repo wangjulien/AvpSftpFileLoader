@@ -17,7 +17,7 @@ public class ScheduleConfig implements SchedulingConfigurer {
 	@Bean(destroyMethod = "shutdown")
 	public ThreadPoolTaskScheduler taskScheduler() {
 		final ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-		threadPoolTaskScheduler.setPoolSize(5);
+		threadPoolTaskScheduler.setPoolSize(10);
 		threadPoolTaskScheduler.setThreadNamePrefix("ScheduledTask-");
 		threadPoolTaskScheduler.setWaitForTasksToCompleteOnShutdown(false);
 		threadPoolTaskScheduler.initialize();

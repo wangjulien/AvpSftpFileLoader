@@ -1,11 +1,24 @@
-tmp/
+# log files
 log/
 logs/
 *.log
-*.vpp.bak*
 
-### Eclipse ### 
-.springBeans
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+
+# Built application files
+*.apk
+*.ap_
+
+# Files for the Dalvik VM
+*.dex
+
+
+### Eclipse project files ###
 .classpath
 .project
 .settings
@@ -13,12 +26,9 @@ logs/
 target/
 
 ### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
 .springBeans
+.apt_generated
+.factorypath
 
 ### IntelliJ IDEA ###
 .idea
@@ -34,25 +44,20 @@ dist/
 nbdist/
 .nb-gradle/
 
-# Built application files
-*.apk
-*.ap_
-
-# Files for the Dalvik VM
-*.dex
-
-# Java class files
-*.class
-
-# Generated files
-bin/
-gen/
-
-# Gradle files
+### Gradle files  ###
 .gradle/
 build/
 
-# Maven files
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+### Maven files  ###
 target/
 !.mvn/wrapper/maven-wrapper.jar
 
@@ -100,6 +105,22 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
 
 # Directories potentially created on remote AFP share
 .AppleDB
